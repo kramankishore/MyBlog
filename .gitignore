@@ -1,0 +1,43 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/Admin/dist
+/Admin/tmp
+/Admin/out-tsc
+
+# dependencies
+/Admin/node_modules
+
+# profiling files
+/Admin/chrome-profiler-events.json
+/Admin/speed-measure-plugin.json
+
+# IDEs and editors
+/Admin/.idea
+/Admin/.project
+/Admin/.classpath
+/Admin/.c9/
+/Admin/*.launch
+/Admin/.settings/
+/Admin/*.sublime-workspace
+
+# IDE - VSCode
+/Admin/.vscode/*
+/Admin/!.vscode/settings.json
+/Admin/!.vscode/tasks.json
+/Admin/!.vscode/launch.json
+/Admin/!.vscode/extensions.json
+
+# misc
+/Admin/.sass-cache
+/Admin/connect.lock
+/Admin/coverage
+/Admin/libpeerconnection.log
+/Admin/npm-debug.log
+/Admin/yarn-error.log
+/Admin/testem.log
+/Admin/typings
+
+# System Files
+/Admin/.DS_Store
+/Admin/Thumbs.db
