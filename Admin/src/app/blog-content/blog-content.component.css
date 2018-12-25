@@ -1,7 +1,46 @@
 .blog-content-main {
-  margin: 200px 200px 200px 200px;
+  background-color: white;
 }
 .contentTextarea {
-  min-width: 200px !important;
+  min-width: 700px !important;
   min-height: 200px !important;
+}
+.tagHead {
+  margin-left: 40px;
+  margin-top: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 30px;
+}
+.tagInput {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+  width: 50% !important;
+}
+.titleHead {
+  margin-left: 40px;
+  margin-top: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 30px;
+}
+.titleInput {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+  width: 50% !important;
+}
+.contentHead {
+  margin-left: 40px;
+  margin-top: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 30px;
+}
+.contentInput {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+  width: 75% !important;
+}
+
+.buttonsStyle {
 }

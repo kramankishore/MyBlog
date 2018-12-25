@@ -1,8 +1,8 @@
-<div>
+<div class="blog-content-main">
   <div>
     <span>
-      Tag:
-      <form>
+      <a class="tagHead">Tag:</a>
+      <form class="tagInput">
         <mat-form-field>
           <input matInput placeholder="Enter Tag" />
         </mat-form-field>
@@ -11,8 +11,8 @@
   </div>
   <div>
     <span
-      >Title:
-      <form>
+      ><a class="titleHead">Title:</a>
+      <form class="titleInput">
         <mat-form-field>
           <textarea matInput placeholder="Enter Title"></textarea>
         </mat-form-field>
@@ -21,8 +21,8 @@
   </div>
   <div>
     <span
-      >Content:
-      <form>
+      ><a class="contentHead">Content:</a>
+      <form class="contentInput">
         <mat-form-field appearance="outline">
           <textarea
             class="contentTextarea"
@@ -34,7 +34,7 @@
     </span>
   </div>
   <div>
-    <span>
+    <span class="buttonsStyle">
       <button mat-button>Edit</button> <button mat-button>Save</button>
       <button mat-button>Submit</button>
     </span>
