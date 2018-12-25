@@ -1,0 +1,23 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  min-width: 200px;
+  width: auto;
+}
+
+.sidenav-submenu {
+  margin-left: 15px;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky !important;
+  /* position: fixed; */
+  top: 0 !important;
+  z-index: 1 !important;
+}
+
+.content-style {
+  margin-top: auto;
+}

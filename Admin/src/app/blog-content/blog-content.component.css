@@ -1,0 +1,7 @@
+.blog-content-main {
+  margin: 200px 200px 200px 200px;
+}
+.contentTextarea {
+  min-width: 200px !important;
+  min-height: 200px !important;
+}
