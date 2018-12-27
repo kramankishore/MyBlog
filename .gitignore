@@ -41,3 +41,51 @@
 # System Files
 /Admin/.DS_Store
 /Admin/Thumbs.db
+
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/Server/dist
+/Server/tmp
+/Server/out-tsc
+
+# dependencies
+/Server/node_modules
+
+# profiling files
+/Server/chrome-profiler-events.json
+/Server/speed-measure-plugin.json
+
+# IDEs and editors
+/Server/.idea
+/Server/.project
+/Server/.classpath
+/Server/.c9/
+/Server/*.launch
+/Server/.settings/
+/Server/*.sublime-workspace
+
+# IDE - VSCode
+/Server/.vscode/*
+/Server/!.vscode/settings.json
+/Server/!.vscode/tasks.json
+/Server/!.vscode/launch.json
+/Server/!.vscode/extensions.json
+
+# misc
+/Server/.sass-cache
+/Server/connect.lock
+/Server/coverage
+/Server/libpeerconnection.log
+/Server/npm-debug.log
+/Server/yarn-error.log
+/Server/testem.log
+/Server/typings
+
+# System Files
+/Server/.DS_Store
+/Server/Thumbs.db
+
+# Uploaded images
+/Server/uploadedImages

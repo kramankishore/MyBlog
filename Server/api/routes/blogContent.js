@@ -13,6 +13,7 @@ var storage = multer.diskStorage({
   }
 });
 
+// POST request to upload a new image.
 var upload = multer({ storage: storage });
 router.post("/uploadImage", upload.single("file"), function(req, res, next) {
   // req.file is the `avatar` file
@@ -34,6 +35,7 @@ router.post("/uploadImage", upload.single("file"), function(req, res, next) {
   });
 });
 
+// To fetch an image from uploaded images.
 router.get("/getUploadedImage", (req, res, next) => {
   console.log("Received uploaded image GET Request");
   console.log(req.query);
