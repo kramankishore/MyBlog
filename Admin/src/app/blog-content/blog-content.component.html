@@ -29,14 +29,17 @@
             matInput
             placeholder="Enter Content"
           ></textarea>
+          <!-- <editor [(ngModel)]="dataModel"></editor> -->
         </mat-form-field>
       </form>
+      <editor apiKey="test" [init]="tinymceInit"></editor>
     </span>
   </div>
-  <div>
-    <span class="buttonsStyle">
-      <button mat-button>Edit</button> <button mat-button>Save</button>
-      <button mat-button>Submit</button>
+  <div class="buttonArea">
+    <span>
+      <button class="buttonsStyle" mat-button>Edit</button>
+      <button class="buttonsStyle" mat-button>Save</button>
+      <button class="buttonsStyle" mat-button>Submit</button>
     </span>
   </div>
 </div>

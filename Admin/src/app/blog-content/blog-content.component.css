@@ -43,4 +43,10 @@
 }
 
 .buttonsStyle {
+  min-width: 30px;
+  margin: 20px 20px 20px 20px;
+}
+
+.buttonArea {
+  margin-left: 30%;
 }

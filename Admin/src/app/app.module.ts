@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatMenuModule } from "@angular/material/menu";
 import { BlogContentComponent } from "./blog-content/blog-content.component";
 import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { EditorModule } from "@tinymce/tinymce-angular";
 
 @NgModule({
   declarations: [AppComponent, MainNavComponent, BlogContentComponent],
@@ -31,7 +32,8 @@ import { MatFormFieldModule, MatInputModule } from "@angular/material";
     BrowserAnimationsModule,
     MatMenuModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    EditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

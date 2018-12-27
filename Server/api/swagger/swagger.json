@@ -1,0 +1,50 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Wallet API"
+  },
+  "host": "localhost:8899",
+  "basePath": "/",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/blogContent/uploadImage": {
+      "post": {
+        "tags": ["Blog Content"],
+        "summary": "Upload Images on to the Server.",
+        "description": "",
+        "operationId": "uploadImage",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User details json object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/uploadImage"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
+    }
+  },
+  "definitions": {
+    "uploadImage": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
