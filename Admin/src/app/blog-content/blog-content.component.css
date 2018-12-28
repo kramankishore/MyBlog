@@ -2,8 +2,12 @@
   background-color: white;
 }
 .contentTextarea {
-  min-width: 700px !important;
-  min-height: 200px !important;
+  min-width: 800px !important;
+  min-height: 800px !important;
+  margin-left: 40px;
+  width: 800px !important;
+  height: 800px !important;
+  margin-top: 30px;
 }
 .tagHead {
   margin-left: 40px;
@@ -48,5 +52,6 @@
 }
 
 .buttonArea {
+  position: relative;
   margin-left: 30%;
 }

@@ -1,0 +1,33 @@
+Database Design
+
+Table 1: ArticleData
+{
+ "articleId": "" // Unique ID - Partition Key
+ "articleTag": "Options Basics 1",
+ "title": "",
+ "content": ""
+}
+
+
+Table 2: ArticleGroupData
+{ 
+"groupTag": "Options Basics", // Parition Key
+"preference": "1"
+}
+
+Table 3: ArticleMetaData
+// More fields can be added later like number of hits, user ratings, etc.
+{
+"articleId": "",
+"groupTag": "", // Parition Key
+"preferenceInGroup": "1"
+}
+
+
+Table 4: ArticleInProgressData
+{
+ "articleId": "" // Unique ID
+ "articleTag": "Options Basics 1",
+ "title": "",
+ "content": ""
+}

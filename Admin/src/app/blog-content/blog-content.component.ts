@@ -6,6 +6,7 @@ import { Component, Input, Output, OnInit } from "@angular/core";
   styleUrls: ["./blog-content.component.css"]
 })
 export class BlogContentComponent implements OnInit {
+  content = "";
   tinymceInit = {
     plugins: "image link",
     convert_urls: true,
@@ -59,22 +60,17 @@ export class BlogContentComponent implements OnInit {
     let URL = "http://xyx:5050";
     console.log(this.parentOption);
     console.log(this.childOption);
-    this.output = this.serverOutput();
-    //console.log(URL + "?parentOption=" + this.parentOption + ",childOption=" + this.childOption);
   }
 
-  serverOutput() {
-    var title;
-    var content;
-    if (this.parentOption == "1" && this.childOption == "1") {
-      title = "Basics 1";
-      content = "Content 1";
-      return title + content;
-    }
-    if (this.parentOption == "1" && this.childOption == "2") {
-      title = "Basics 2";
-      content = "Content 2";
-      return title + content;
-    }
+  handleContentChangeEvent(event) {
+    console.log("Content Changed!");
+    this.content = event.editor.getBody();
+    console.log(this.content);
+  }
+
+  handleSaveEvent(event) {
+    // Complete this function.
+    // Push event data to the Database.
+    console.log("Content Saved!");
   }
 }

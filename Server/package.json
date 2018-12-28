@@ -10,10 +10,12 @@
   "author": "K Raman Kishore, Pallavi Mahalingaiah",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.382.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "multer": "^1.4.1",
     "nodemon": "^1.18.9",
-    "swagger-ui-express": "^4.0.2"
+    "swagger-ui-express": "^4.0.2",
+    "underscore": "^1.9.1"
   }
 }

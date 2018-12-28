@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Wallet API"
+    "title": "Blog APIs"
   },
   "host": "localhost:8899",
   "basePath": "/",
@@ -10,9 +10,9 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/blogContent/uploadImage": {
+    "/blogImages/uploadImage": {
       "post": {
-        "tags": ["Blog Content"],
+        "tags": ["Blog Images"],
         "summary": "Upload Images on to the Server.",
         "description": "",
         "operationId": "uploadImage",
@@ -35,6 +35,121 @@
         },
         "x-swagger-router-controller": "User"
       }
+    },
+    "/blogImages/getUploadedImage": {
+      "get": {
+        "tags": ["Blog Images"],
+        "summary": "To retrieve images from the server.",
+        "description": "",
+        "operationId": "getUploadedImage",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "Image file name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
+    },
+    "/blogContent/getArticleMap": {
+      "get": {
+        "tags": ["Blog Content"],
+        "summary": "To retrieve all articles and their article groups.",
+        "description": "",
+        "operationId": "getArticleMap",
+        "produces": ["application/xml", "application/json"],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
+    },
+    "/blogContent/getArticleById": {
+      "get": {
+        "tags": ["Blog Content"],
+        "summary": "To retrieve article details by article Id.",
+        "description": "",
+        "operationId": "getArticleById",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "Article Id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
+    },
+    "/blogContent/saveArticleById": {
+      "post": {
+        "tags": ["Blog Content"],
+        "summary": "To save article details by article Id.",
+        "description": "",
+        "operationId": "saveArticleById",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Article details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/articleDetails"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
+    },
+    "/blogContent/submitArticleById": {
+      "post": {
+        "tags": ["Blog Content"],
+        "summary": "To save article details by article Id.",
+        "description": "",
+        "operationId": "submitArticleById",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Article details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/articleDetails"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
     }
   },
   "definitions": {
@@ -43,6 +158,23 @@
       "properties": {
         "file": {
           "type": "object"
+        }
+      }
+    },
+    "articleDetails": {
+      "type": "object",
+      "properties": {
+        "articleId": {
+          "type": "string"
+        },
+        "articleTag": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
         }
       }
     }

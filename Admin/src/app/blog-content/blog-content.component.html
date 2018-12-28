@@ -22,23 +22,30 @@
   <div>
     <span
       ><a class="contentHead">Content:</a>
-      <form class="contentInput">
+      <!-- <form class="contentInput">
         <mat-form-field appearance="outline">
           <textarea
             class="contentTextarea"
             matInput
             placeholder="Enter Content"
           ></textarea>
-          <!-- <editor [(ngModel)]="dataModel"></editor> -->
         </mat-form-field>
-      </form>
-      <editor apiKey="test" [init]="tinymceInit"></editor>
+      </form> -->
+      <editor
+        id="contentEditor"
+        (onChange)="handleContentChangeEvent($event)"
+        class="contentTextarea"
+        apiKey="test"
+        [init]="tinymceInit"
+      ></editor>
     </span>
   </div>
   <div class="buttonArea">
     <span>
       <button class="buttonsStyle" mat-button>Edit</button>
-      <button class="buttonsStyle" mat-button>Save</button>
+      <button class="buttonsStyle" (click)="handleSaveEvent()" mat-button>
+        Save
+      </button>
       <button class="buttonsStyle" mat-button>Submit</button>
     </span>
   </div>

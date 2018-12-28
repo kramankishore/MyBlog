@@ -1,0 +1,75 @@
+Home Page:
+
+ - Intro
+
+Options Basics:
+
+1) Basic Terminology
+	- Call and Put options
+	- Strike Price, Stock Price, Option Contract Price
+
+2) Effect of underlying's price	
+
+3) Time Decay
+
+4) Volatility
+
+5) Greeks
+
+6) Pay off Diagrams
+
+7) Strategies
+
+My Strategy:
+
+1) Option Buying vs Selling
+
+2) Probability of Profit and Delta
+
+3) Trend Following
+
+4) Hedging vs Naked selling
+
+5) Core Strategy - Entries & Exits
+
+6) Core Strategy - Adjustments
+
+7) Core Strategy - Other factors (Margin, Size, Staying Neutral, etc.)
+
+6) Platforms I use
+
+7) Small Account Problems
+
+8) Expected Returns
+
+Trade History:
+
+1) Past Trades
+
+2) Current Positions
+
+3) Watchlist - Excel sheet stuff
+
+4) Things to incorporate
+
+Trading Psychology:
+
+1) It doesn't matter what you feel about the market
+
+2) Trading plan is the most important thing
+
+3) When the positions go against you
+
+4) Revenge Trading
+
+5) It's okay to miss out
+
+More Content:
+
+1) Volatility being overstated.
+
+2) xyz skew
+
+2) Does weekend theta really work?
+
+2) Black Scholes

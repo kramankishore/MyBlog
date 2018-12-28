@@ -4,15 +4,14 @@ const app = express();
 const router = express.Router();
 const bodyParser = require("body-parser");
 
+const blogImages = require("./api/routes/blogImages");
 const blogContent = require("./api/routes/blogContent");
 
-/*
 var swaggerUI = require("swagger-ui-express"),
   swaggerDocument = require("./api/swagger/swagger.json");
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-app.use("/api/v1", router);
-*/
+app.use("/blogSwagger-test", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use("/blogSwagger/v1", router);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -29,6 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/blogImages", blogImages);
 app.use("/blogContent", blogContent);
 
 module.exports = app;
