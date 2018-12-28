@@ -150,6 +150,37 @@
         },
         "x-swagger-router-controller": "User"
       }
+    },
+    "/blogContent/createNewArticle": {
+      "post": {
+        "tags": ["Blog Content"],
+        "summary": "To create new article meta data.",
+        "description": "",
+        "operationId": "createNewArticle",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "groupTag",
+            "description": "Group Tag",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "articleTag",
+            "description": "Article Tag",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "x-swagger-router-controller": "User"
+      }
     }
   },
   "definitions": {

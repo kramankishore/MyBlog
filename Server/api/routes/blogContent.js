@@ -200,6 +200,11 @@ router.post("/saveArticleById", (req, res, next) => {
 });
 
 // To Submit article details by article id.
+// Makes an entry into the ArticleData table.
+// Makes an entry into the ArticleMetaData table.
+// To do:
+// Delete the entry from ArticleInProgressData table.
+// Delete the entry from ArticleInProgressMetaData table.
 router.post("/submitArticleById", (req, res, next) => {
   console.log("Received POST Request to SAVE article by article id.");
 
@@ -212,7 +217,7 @@ router.post("/submitArticleById", (req, res, next) => {
 
   if (articleIdInput === undefined || articleIdInput.trim() == "") {
     res.status(400).json({
-      message: "Error: Invalid Article ID."
+      message: "Error: Could not find articleId."
     });
   }
 
@@ -255,9 +260,226 @@ router.post("/submitArticleById", (req, res, next) => {
       });
     } else {
       console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-      res.status(200).json({
-        message: "Article saved successfully!",
-        articleId: articleIdInput
+
+      // Copy article meta data from ArticleInProgressMetaData table to ArticleMetaData table.
+
+      var table2 = "ArticleInProgressMetaData";
+
+      var params2 = {
+        TableName: table2,
+        Key: {
+          articleId: articleIdInput
+        }
+      };
+
+      docClient.get(params2, function(err, data) {
+        if (err) {
+          console.error(
+            "Unable to read item. Error JSON:",
+            JSON.stringify(err, null, 2)
+          );
+          res.status(500).json({
+            message:
+              "Error: Could not get article in progress meta data from Database!",
+            details: err
+          });
+        } else {
+          console.log(
+            "Success: Get Article in progress meta data:",
+            JSON.stringify(data, null, 2)
+          );
+
+          var articleInProgressMetaData = data.Item;
+
+          // Write articleInProgressMetaData into ArticleMetaData Table.
+
+          var table3 = "ArticleMetaData";
+
+          var params3 = {
+            TableName: table3,
+            Key: {
+              articleId: articleIdInput
+            },
+            UpdateExpression: "set groupTag = :g, preferenceInGroup=:p",
+            ExpressionAttributeValues: {
+              ":g": articleInProgressMetaData.groupTag,
+              ":p": articleInProgressMetaData.preference
+            },
+            ReturnValues: "UPDATED_NEW"
+          };
+
+          docClient.update(params3, function(err, data) {
+            if (err) {
+              console.error(
+                "Unable to read item. Error JSON:",
+                JSON.stringify(err, null, 2)
+              );
+              res.status(500).json({
+                message: "Error: Could not update meta data in Database!",
+                details: err
+              });
+            } else {
+              console.log(
+                "Success: Updated article meta data:",
+                JSON.stringify(data, null, 2)
+              );
+
+              // To do:s
+              // Delete the entry from ArticleInProgressMetaData table and ArticleInProgressData table
+
+              res.status(200).json({
+                message: "Article submitted successfully!",
+                articleId: articleIdInput
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+// To create new article.
+// Input:
+// Group tag
+// Article tag
+// This api does the following:
+// - Generates a random article id
+// - Creates article meta data with the generated article id, group tag and preference in group
+// - Creates article data with the generated article id and the provided article tag
+// - Returns back the created article id.
+
+router.post("/createNewArticle", (req, res, next) => {
+  console.log("Received POST Request to create new article metadata.");
+
+  var groupTag = req.query.groupTag;
+  var articleTag = req.query.articleTag;
+
+  // Validations
+
+  if (groupTag === undefined || groupTag.trim() == "") {
+    res.status(400).json({
+      message: "Error: groupTag not found."
+    });
+  }
+
+  if (articleTag === undefined || articleTag.trim() == "") {
+    res.status(400).json({
+      message: "Error: articleTag not found."
+    });
+  }
+
+  // Creating a random generated article id.
+  var articleIdGenerated = Math.random()
+    .toString(36)
+    .substring(2);
+
+  // Getting the current preference and incrementing it by 1.
+
+  var table = "ArticleInProgressMetaData";
+
+  var params = {
+    TableName: table
+  };
+
+  docClient.scan(params, function(err, data) {
+    if (err) {
+      console.error(
+        "Unable to read item. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
+      res.status(500).json({
+        message: "Error: Could not read article meta data from Database!",
+        details: err
+      });
+    } else {
+      console.log(
+        "Success: Get Article In Progress Meta Data:",
+        JSON.stringify(data, null, 2)
+      );
+
+      var articleInProgressMetaData = data;
+
+      var filteredArticleInProgressMetaData = _.where(
+        articleInProgressMetaData.Items,
+        {
+          groupTag: groupTag
+        }
+      );
+
+      var preference = filteredArticleInProgressMetaData.length + 1;
+
+      var table2 = "ArticleInProgressMetaData";
+
+      var params2 = {
+        TableName: table2,
+        Key: {
+          articleId: articleIdGenerated
+        },
+        UpdateExpression: "set groupTag=:g, preference=:p",
+        ExpressionAttributeValues: {
+          ":g": groupTag,
+          ":p": preference
+        },
+        ReturnValues: "UPDATED_NEW"
+      };
+
+      console.log("Updating the item...");
+      docClient.update(params2, function(err, data) {
+        if (err) {
+          console.error(
+            "Unable to update item. Error JSON:",
+            JSON.stringify(err, null, 2)
+          );
+          res.status(500).json({
+            message: "Error: Could not save the article meta data in database.",
+            details: err
+          });
+        } else {
+          console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+
+          // Adding an entry into the ArticleInProgressData table with the generated articleId and the input articleTag
+          var table3 = "ArticleInProgressData";
+
+          var params3 = {
+            TableName: table3,
+            Key: {
+              articleId: articleIdGenerated
+            },
+            UpdateExpression: "set articleTag=:a, title=:t, content=:c",
+            ExpressionAttributeValues: {
+              ":a": articleTag,
+              ":t": " ",
+              ":c": " "
+            },
+            ReturnValues: "UPDATED_NEW"
+          };
+
+          console.log("Updating the item...");
+          docClient.update(params3, function(err, data) {
+            if (err) {
+              console.error(
+                "Unable to update item. Error JSON:",
+                JSON.stringify(err, null, 2)
+              );
+              res.status(500).json({
+                message:
+                  "Error: Could not save the article meta data in database.",
+                details: err
+              });
+            } else {
+              console.log(
+                "UpdateItem succeeded:",
+                JSON.stringify(data, null, 2)
+              );
+
+              res.status(200).json({
+                message: "Article created successfully!",
+                articleId: articleIdGenerated
+              });
+            }
+          });
+        }
       });
     }
   });

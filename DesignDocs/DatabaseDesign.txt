@@ -18,11 +18,10 @@ Table 2: ArticleGroupData
 Table 3: ArticleMetaData
 // More fields can be added later like number of hits, user ratings, etc.
 {
-"articleId": "",
-"groupTag": "", // Parition Key
+"articleId": "", // Parition Key
+"groupTag": "",
 "preferenceInGroup": "1"
 }
-
 
 Table 4: ArticleInProgressData
 {
@@ -30,4 +29,12 @@ Table 4: ArticleInProgressData
  "articleTag": "Options Basics 1",
  "title": "",
  "content": ""
+}
+
+Table 5: ArticleInProgressMetaData
+// More fields can be added later like number of hits, user ratings, etc.
+{
+"articleId": "", // Parition Key
+"groupTag": "",
+"preferenceInGroup": "1"
 }
