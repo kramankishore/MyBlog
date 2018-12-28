@@ -324,12 +324,69 @@ router.post("/submitArticleById", (req, res, next) => {
                 JSON.stringify(data, null, 2)
               );
 
-              // To do:s
               // Delete the entry from ArticleInProgressMetaData table and ArticleInProgressData table
 
-              res.status(200).json({
-                message: "Article submitted successfully!",
-                articleId: articleIdInput
+              // 1. Delete the entry from ArticleInProgressMetaData table
+              var table4 = "ArticleInProgressMetaData";
+
+              var params4 = {
+                TableName: table4,
+                Key: {
+                  articleId: articleIdInput
+                }
+              };
+
+              docClient.delete(params4, function(err, data) {
+                if (err) {
+                  console.error(
+                    "Unable to read item. Error JSON:",
+                    JSON.stringify(err, null, 2)
+                  );
+                  res.status(500).json({
+                    message:
+                      "Error: Could not delete article in progress meta data in Database!",
+                    details: err
+                  });
+                } else {
+                  console.log(
+                    "Success: Deleted article in progress meta data:",
+                    JSON.stringify(data, null, 2)
+                  );
+
+                  // 2. Delete the entry ArticleInProgressData table
+                  var table5 = "ArticleInProgressData";
+
+                  var params5 = {
+                    TableName: table5,
+                    Key: {
+                      articleId: articleIdInput
+                    }
+                  };
+
+                  docClient.delete(params5, function(err, data) {
+                    if (err) {
+                      console.error(
+                        "Unable to read item. Error JSON:",
+                        JSON.stringify(err, null, 2)
+                      );
+                      res.status(500).json({
+                        message:
+                          "Error: Could not delete article in progress data in Database!",
+                        details: err
+                      });
+                    } else {
+                      console.log(
+                        "Success: Deleted article in progress data:",
+                        JSON.stringify(data, null, 2)
+                      );
+
+                      res.status(200).json({
+                        message: "Article submitted successfully!",
+                        articleId: articleIdInput
+                      });
+                    }
+                  });
+                }
               });
             }
           });
@@ -347,7 +404,7 @@ router.post("/submitArticleById", (req, res, next) => {
 // - Generates a random article id
 // - Creates article meta data with the generated article id, group tag and preference in group
 // - Creates article data with the generated article id and the provided article tag
-// - Returns back the created article id.
+// - Returns back the created article data.
 
 router.post("/createNewArticle", (req, res, next) => {
   console.log("Received POST Request to create new article metadata.");
@@ -475,7 +532,8 @@ router.post("/createNewArticle", (req, res, next) => {
 
               res.status(200).json({
                 message: "Article created successfully!",
-                articleId: articleIdGenerated
+                articleId: articleIdGenerated,
+                articleData: data.Attributes
               });
             }
           });
