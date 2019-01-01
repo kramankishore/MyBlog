@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const authModule = require("../middleware/auth");
 var _ = require("underscore");
 
 var AWS = require("aws-sdk");
@@ -136,7 +137,7 @@ router.get("/getArticleById", (req, res, next) => {
 });
 
 // To Save article details by article id.
-router.post("/saveArticleById", (req, res, next) => {
+router.post("/saveArticleById", authModule, (req, res, next) => {
   console.log("Received POST Request to SAVE article by article id.");
 
   var articleIdInput = req.body.articleId;
@@ -205,7 +206,7 @@ router.post("/saveArticleById", (req, res, next) => {
 // To do:
 // Delete the entry from ArticleInProgressData table.
 // Delete the entry from ArticleInProgressMetaData table.
-router.post("/submitArticleById", (req, res, next) => {
+router.post("/submitArticleById", authModule, (req, res, next) => {
   console.log("Received POST Request to SAVE article by article id.");
 
   var articleIdInput = req.body.articleId;
@@ -406,7 +407,7 @@ router.post("/submitArticleById", (req, res, next) => {
 // - Creates article data with the generated article id and the provided article tag
 // - Returns back the created article data.
 
-router.post("/createNewArticle", (req, res, next) => {
+router.post("/createNewArticle", authModule, (req, res, next) => {
   console.log("Received POST Request to create new article metadata.");
 
   var groupTag = req.query.groupTag;

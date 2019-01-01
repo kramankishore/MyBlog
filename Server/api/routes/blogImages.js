@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const authModule = require("../middleware/auth");
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -15,7 +16,11 @@ var storage = multer.diskStorage({
 
 // POST request to upload a new image.
 var upload = multer({ storage: storage });
-router.post("/uploadImage", upload.single("file"), function(req, res, next) {
+router.post("/uploadImage", authModule, upload.single("file"), function(
+  req,
+  res,
+  next
+) {
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
 

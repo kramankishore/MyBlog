@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 const blogImages = require("./api/routes/blogImages");
 const blogContent = require("./api/routes/blogContent");
+const userManagement = require("./api/routes/userManagement");
 
 var swaggerUI = require("swagger-ui-express"),
   swaggerDocument = require("./api/swagger/swagger.json");
@@ -30,5 +31,6 @@ app.use((req, res, next) => {
 
 app.use("/blogImages", blogImages);
 app.use("/blogContent", blogContent);
+app.use("/userManagement", userManagement);
 
 module.exports = app;

@@ -23,6 +23,11 @@ paths:
         - "application/xml"
         - "application/json"
       parameters:
+        - in: "header"
+          name: "Authorization"
+          description: "Auth token"
+          type: "string"
+          required: true
         - in: "body"
           name: "body"
           description: "User details json object"
@@ -98,6 +103,11 @@ paths:
         - "application/xml"
         - "application/json"
       parameters:
+        - in: "header"
+          name: "Authorization"
+          description: "Auth token"
+          type: "string"
+          required: true
         - in: "body"
           name: "body"
           description: "Article details"
@@ -119,6 +129,11 @@ paths:
         - "application/xml"
         - "application/json"
       parameters:
+        - in: "header"
+          name: "Authorization"
+          description: "Auth token"
+          type: "string"
+          required: true
         - in: "body"
           name: "body"
           description: "Article details"
@@ -140,6 +155,11 @@ paths:
         - "application/xml"
         - "application/json"
       parameters:
+        - in: "header"
+          name: "Authorization"
+          description: "Auth token"
+          type: "string"
+          required: true
         - in: "query"
           name: "groupTag"
           description: "Group Tag"
@@ -150,6 +170,27 @@ paths:
           description: "Article Tag"
           required: true
           type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /userManagement/login:
+    post:
+      tags:
+        - "User Management"
+      summary: "To authenticate a user."
+      description: ""
+      operationId: "login"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "User Credentials"
+          required: true
+          schema:
+            $ref: "#/definitions/userLogin"
       responses:
         default:
           description: "successful operation"
@@ -170,4 +211,18 @@ definitions:
       title:
         type: "string"
       content:
+        type: "string"
+  userSignup:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  userLogin:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
         type: "string"

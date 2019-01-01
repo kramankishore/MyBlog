@@ -38,3 +38,10 @@ Table 5: ArticleInProgressMetaData
 "groupTag": "",
 "preferenceInGroup": "1"
 }
+
+Table 6: UserDetails
+{
+"Id": "Email",
+"Passhash": "",
+"Role": "Admin"
+}
