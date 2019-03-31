@@ -1,289 +1,418 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Blog APIs"
-  },
-  "host": "localhost:8899",
-  "basePath": "/",
-  "schemes": ["http", "https"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
-  "paths": {
-    "/blogImages/uploadImage": {
-      "post": {
-        "tags": ["Blog Images"],
-        "summary": "Upload Images on to the Server.",
-        "description": "",
-        "operationId": "uploadImage",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "description": "Auth token",
-            "type": "string",
-            "required": true
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User details json object",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/uploadImage"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/blogImages/getUploadedImage": {
-      "get": {
-        "tags": ["Blog Images"],
-        "summary": "To retrieve images from the server.",
-        "description": "",
-        "operationId": "getUploadedImage",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "id",
-            "description": "Image file name",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/blogContent/getArticleMap": {
-      "get": {
-        "tags": ["Blog Content"],
-        "summary": "To retrieve all articles and their article groups.",
-        "description": "",
-        "operationId": "getArticleMap",
-        "produces": ["application/xml", "application/json"],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/blogContent/getArticleById": {
-      "get": {
-        "tags": ["Blog Content"],
-        "summary": "To retrieve article details by article Id.",
-        "description": "",
-        "operationId": "getArticleById",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "id",
-            "description": "Article Id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/blogContent/saveArticleById": {
-      "post": {
-        "tags": ["Blog Content"],
-        "summary": "To save article details by article Id.",
-        "description": "",
-        "operationId": "saveArticleById",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "description": "Auth token",
-            "type": "string",
-            "required": true
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Article details",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/articleDetails"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/blogContent/submitArticleById": {
-      "post": {
-        "tags": ["Blog Content"],
-        "summary": "To save article details by article Id.",
-        "description": "",
-        "operationId": "submitArticleById",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "description": "Auth token",
-            "type": "string",
-            "required": true
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Article details",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/articleDetails"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/blogContent/createNewArticle": {
-      "post": {
-        "tags": ["Blog Content"],
-        "summary": "To create new article meta data.",
-        "description": "",
-        "operationId": "createNewArticle",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "description": "Auth token",
-            "type": "string",
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "groupTag",
-            "description": "Group Tag",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "articleTag",
-            "description": "Article Tag",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    },
-    "/userManagement/login": {
-      "post": {
-        "tags": ["User Management"],
-        "summary": "To authenticate a user.",
-        "description": "",
-        "operationId": "login",
-        "produces": ["application/xml", "application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User Credentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/userLogin"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "x-swagger-router-controller": "User"
-      }
-    }
-  },
-  "definitions": {
-    "uploadImage": {
-      "type": "object",
-      "properties": {
-        "file": {
-          "type": "object"
-        }
-      }
-    },
-    "articleDetails": {
-      "type": "object",
-      "properties": {
-        "articleId": {
-          "type": "string"
-        },
-        "articleTag": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "content": {
-          "type": "string"
-        }
-      }
-    },
-    "userSignup": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      }
-    },
-    "userLogin": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      }
-    }
-  }
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Blog APIs"
+	},
+	"host": "localhost:8899",
+	"basePath": "/",
+	"schemes": [
+		"http",
+		"https"
+	],
+	"consumes": [
+		"application/json"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+		"/blogImages/uploadImage": {
+			"post": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "Upload Images on to the Server.",
+				"description": "",
+				"operationId": "uploadImage",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "Auth token",
+						"type": "string",
+						"required": true
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "User details json object",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/uploadImage"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogImages/getUploadedImage": {
+			"get": {
+				"tags": [
+					"Blog Images"
+				],
+				"summary": "To retrieve images from the server.",
+				"description": "",
+				"operationId": "getUploadedImage",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"description": "Image file name",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/getArticleMap": {
+			"get": {
+				"tags": [
+					"Blog Content"
+				],
+				"summary": "To retrieve all articles and their article groups.",
+				"description": "",
+				"operationId": "getArticleMap",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/getArticleById": {
+			"get": {
+				"tags": [
+					"Blog Content"
+				],
+				"summary": "To retrieve article details by article Id.",
+				"description": "",
+				"operationId": "getArticleById",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"description": "Article Id",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/saveArticleById": {
+			"post": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "To save article details by article Id.",
+				"description": "",
+				"operationId": "saveArticleById",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "Auth token",
+						"type": "string",
+						"required": true
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Article details",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/saveArticleDetails"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/submitArticleById": {
+			"post": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "To save article details by article Id.",
+				"description": "",
+				"operationId": "submitArticleById",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "Auth token",
+						"type": "string",
+						"required": true
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Article details",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/submitArticleDetails"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/createNewArticle": {
+			"post": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "To create new article meta data.",
+				"description": "",
+				"operationId": "createNewArticle",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "Auth token",
+						"type": "string",
+						"required": true
+					},
+					{
+						"in": "query",
+						"name": "groupTag",
+						"description": "Group Tag",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "articleTag",
+						"description": "Article Tag",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/userManagement/login": {
+			"post": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "To authenticate a user.",
+				"description": "",
+				"operationId": "login",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "User Credentials",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/userLogin"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/getArticleMapForAdmin": {
+			"get": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "To retrieve all articles and their article groups for Admin.",
+				"description": "",
+				"operationId": "getArticleMapForAdmin",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "Auth token",
+						"type": "string",
+						"required": true
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		},
+		"/blogContent/getArticleByIdForAdmin": {
+			"get": {
+				"tags": [
+					"Admin"
+				],
+				"summary": "To retrieve article details by article Id.",
+				"description": "",
+				"operationId": "getArticleById",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "Auth token",
+						"type": "string",
+						"required": true
+					},
+					{
+						"in": "query",
+						"name": "id",
+						"description": "Article Id",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "successful operation"
+					}
+				},
+				"x-swagger-router-controller": "User"
+			}
+		}
+	},
+	"definitions": {
+		"uploadImage": {
+			"type": "object",
+			"properties": {
+				"file": {
+					"type": "object"
+				}
+			}
+		},
+		"saveArticleDetails": {
+			"type": "object",
+			"properties": {
+				"articleId": {
+					"type": "string"
+				},
+				"draftArticleTag": {
+					"type": "string"
+				},
+				"draftTitle": {
+					"type": "string"
+				},
+				"draftContent": {
+					"type": "string"
+				}
+			}
+		},
+		"submitArticleDetails": {
+			"type": "object",
+			"properties": {
+				"articleId": {
+					"type": "string"
+				},
+				"articleTag": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				},
+				"content": {
+					"type": "string"
+				}
+			}
+		},
+		"userSignup": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				},
+				"password": {
+					"type": "string"
+				}
+			}
+		},
+		"userLogin": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				},
+				"password": {
+					"type": "string"
+				}
+			}
+		}
+	}
 }

@@ -17,10 +17,20 @@ AWS.config.loadFromPath(dynamoDBRWKeyPath);
 //var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-// To Get all article groups and articles map.
+/*****************************
+To Get all article groups and articles map.
+Inputs:
+- None
+Actions:
+- Reads all content from GroupData table.
+- Reads all content from ArticleMetaData table.
+- For every group, the metadata of all the articles (finished data) belonging to that group is appended.
+- This appended list is returned back.
+********************************/
+
 router.get("/getArticleMap", (req, res, next) => {
   // Get all article groups.
-  var table = "ArticleGroupData";
+  var table = "GroupData";
 
   var params = {
     TableName: table
@@ -32,7 +42,7 @@ router.get("/getArticleMap", (req, res, next) => {
         "Unable to read item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
-      res.status(500).json({
+      return res.status(500).json({
         message: "Error: Could not read article group data from Database!",
         details: err
       });
@@ -41,9 +51,9 @@ router.get("/getArticleMap", (req, res, next) => {
         "Success: Get Article Group Data:",
         JSON.stringify(data, null, 2)
       );
-      var articleGroupData = data;
+      var groupData = data;
 
-      console.log(articleGroupData);
+      console.log(groupData);
 
       // Get Article Metadata.
 
@@ -59,7 +69,7 @@ router.get("/getArticleMap", (req, res, next) => {
             "Unable to read item. Error JSON:",
             JSON.stringify(err, null, 2)
           );
-          res.status(500).json({
+          return res.status(500).json({
             message: "Error: Could not read article meta data from Database!",
             details: err
           });
@@ -73,25 +83,140 @@ router.get("/getArticleMap", (req, res, next) => {
 
           var articleGroupMap = [];
 
-          for (var i = 0; i < articleGroupData.Items.length; i++) {
-            var articleGroupObj = articleGroupData.Items[i];
-            var articleGroupTag = articleGroupObj.groupTag;
+          for (var i = 0; i < groupData.Items.length; i++) {
+            var groupObj = groupData.Items[i];
+            var groupTag = groupObj.groupTag;
 
-            console.log("Article Group Tag:", articleGroupTag);
+            console.log("Group Tag:", groupTag);
             console.log("Article Meta Data:", articleMetaData);
             // Fetching the article data for each article group.
             var filteredArticleMetaData = _.where(articleMetaData.Items, {
-              groupTag: articleGroupTag
+              groupTag: groupTag
             });
             console.log(
               "Filetered Article Meta Data:",
               filteredArticleMetaData
             );
-            articleGroupObj["articleMetaData"] = filteredArticleMetaData;
-            articleGroupMap.push(articleGroupObj);
+            let filteredFinishedArticleMetaData = {};
+            filteredFinishedArticleMetaData.articleId =
+              filteredArticleMetaData.articleId;
+            filteredFinishedArticleMetaData.articleTag =
+              filteredArticleMetaData.articleTag;
+            filteredFinishedArticleMetaData.groupTag =
+              filteredArticleMetaData.groupTag;
+            filteredFinishedArticleMetaData.preferenceInGroup =
+              filteredArticleMetaData.preferenceInGroup;
+
+            groupObj["articleMetaData"] = filteredFinishedArticleMetaData;
+            articleGroupMap.push(groupObj);
           }
 
-          res.status(200).json({
+          return res.status(200).json({
+            result: articleGroupMap
+          });
+        }
+      });
+    }
+  });
+});
+
+/*****************************
+To Get all article groups and articles map for Admin.
+Inputs:
+- Header: Authorization
+Actions:
+- Reads all content from GroupData table.
+- Reads all content from ArticleMetaData table.
+- For every group, the metadata of all the articles (in progress data) belonging to that group is appended.
+- This appended list is returned back.
+********************************/
+
+router.get("/getArticleMapForAdmin", authModule, (req, res, next) => {
+  // Get all article groups.
+  var table = "GroupData";
+
+  var params = {
+    TableName: table
+  };
+
+  docClient.scan(params, function(err, data) {
+    if (err) {
+      console.error(
+        "Unable to read item. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
+      return res.status(500).json({
+        message: "Error: Could not read article group data from Database!",
+        details: err
+      });
+    } else {
+      console.log(
+        "Success: Get Article Group Data:",
+        JSON.stringify(data, null, 2)
+      );
+      var groupData = data;
+
+      console.log(groupData);
+
+      // Get Article Metadata.
+
+      var table2 = "ArticleMetaData";
+
+      var params2 = {
+        TableName: table2
+      };
+
+      docClient.scan(params2, function(err, data) {
+        if (err) {
+          console.error(
+            "Unable to read item. Error JSON:",
+            JSON.stringify(err, null, 2)
+          );
+          return res.status(500).json({
+            message: "Error: Could not read article meta data from Database!",
+            details: err
+          });
+        } else {
+          console.log(
+            "Success: Get Article Meta Data:",
+            JSON.stringify(data, null, 2)
+          );
+
+          var articleMetaData = data;
+
+          var articleGroupMap = [];
+
+          for (var i = 0; i < groupData.Items.length; i++) {
+            var groupObj = groupData.Items[i];
+            var groupTag = groupObj.groupTag;
+
+            console.log("Group Tag:", groupTag);
+            console.log("Article Meta Data:", articleMetaData);
+            // Fetching the article data for each article group.
+            var filteredArticleMetaData = _.where(articleMetaData.Items, {
+              groupTag: groupTag
+            });
+            console.log(
+              "Filetered Article Meta Data:",
+              filteredArticleMetaData
+            );
+
+            let filteredInProgressArticleMetaData = {};
+            filteredInProgressArticleMetaData.articleId =
+              filteredArticleMetaData.articleId;
+            filteredInProgressArticleMetaData.draftArticleTag =
+              filteredArticleMetaData.articleTag;
+            filteredInProgressArticleMetaData.groupTag =
+              filteredArticleMetaData.groupTag;
+            filteredInProgressArticleMetaData.preferenceInGroup =
+              filteredArticleMetaData.preferenceInGroup;
+
+            groupObj["articleMetaData"] = filteredInProgressArticleMetaData;
+
+            articleGroupMap.push(groupObj);
+          }
+
+          return res.status(200).json({
             result: articleGroupMap
           });
         }
@@ -101,6 +226,8 @@ router.get("/getArticleMap", (req, res, next) => {
 });
 
 // To Get article details by article id.
+// API open for all.
+// Gets only the finished (submitted) article data.
 router.get("/getArticleById", (req, res, next) => {
   console.log("Received Request to GET article by article id.");
 
@@ -123,13 +250,62 @@ router.get("/getArticleById", (req, res, next) => {
         "Unable to read item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
-      res.status(500).json({
+      return res.status(500).json({
+        message: "Error: Could not get article data from Database!",
+        details: err
+      });
+    } else {
+      if (data.isSubmit === false) {
+        console.error("The requested article is not yet submitted by Admin.");
+        return res.status(404).json({
+          message: "Error: Article does not exist!"
+        });
+      }
+
+      console.log("Success: Get Article Data:", JSON.stringify(data, null, 2));
+      let finishedData = {};
+      finishedData.articleId = data.articleId;
+      finishedData.title = data.title;
+      finishedData.content = data.content;
+      return res.status(200).json({
+        articleData: finishedData
+      });
+    }
+  });
+});
+
+// To Get article details by article id for Admin.
+// API not open for all.
+// Gets only the In progress (saved) article data.
+router.get("/getArticleByIdForAdmin", authModule, (req, res, next) => {
+  console.log("Received Request to GET article by article id for Admin.");
+
+  var articleIdInput = req.query.id;
+
+  // Get Article Metadata.
+
+  var table = "ArticleData";
+
+  var params = {
+    TableName: table,
+    Key: {
+      articleId: articleIdInput
+    }
+  };
+
+  docClient.get(params, function(err, data) {
+    if (err) {
+      console.error(
+        "Unable to read item. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
+      return res.status(500).json({
         message: "Error: Could not get article data from Database!",
         details: err
       });
     } else {
       console.log("Success: Get Article Data:", JSON.stringify(data, null, 2));
-      res.status(200).json({
+      return res.status(200).json({
         articleData: data
       });
     }
@@ -141,40 +317,39 @@ router.post("/saveArticleById", authModule, (req, res, next) => {
   console.log("Received POST Request to SAVE article by article id.");
 
   var articleIdInput = req.body.articleId;
-  var articleTag = req.body.articleTag;
-  var title = req.body.title;
-  var content = req.body.content;
+  var draftArticleTag = req.body.draftArticleTag;
+  var draftTitle = req.body.draftTitle;
+  var draftContent = req.body.draftContent;
 
   // Validations
 
   if (articleIdInput === undefined || articleIdInput.trim() == "") {
-    res.status(400).json({
-      message: "Error: Invalid Article ID."
+    return res.status(400).json({
+      message: "Error: Could not find articleId."
     });
   }
 
   if (
-    articleTag === undefined ||
-    title === undefined ||
-    content === undefined
+    draftArticleTag === undefined ||
+    draftTitle === undefined ||
+    draftContent === undefined
   ) {
-    res.status(400).json({
-      message: "Error: Invalid 'articleTag', 'title' or 'content' input."
+    return res.status(400).json({
+      message: "Error: Invalid 'articleTag', 'title' or 'draftContent' input."
     });
   }
 
-  var table = "ArticleInProgressData";
+  var table = "ArticleData";
 
   var params = {
     TableName: table,
     Key: {
       articleId: articleIdInput
     },
-    UpdateExpression: "set articleTag = :a, title=:t, content=:c",
+    UpdateExpression: "set draftTitle=:t, draftContent=:c",
     ExpressionAttributeValues: {
-      ":a": articleTag,
-      ":t": title,
-      ":c": content
+      ":t": draftTitle,
+      ":c": draftContent
     },
     ReturnValues: "UPDATED_NEW"
   };
@@ -186,17 +361,46 @@ router.post("/saveArticleById", authModule, (req, res, next) => {
         "Unable to update item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
-      res.status(500).json({
+      return res.status(500).json({
         message: "Error: Could not save the article details in database.",
         details: err
       });
     } else {
       console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-      res.status(200).json({
-        message: "Article saved successfully!",
-        articleId: articleIdInput
-      });
+
+      // Update articleTag in ArticleMetaData table.
+
+      var table2 = "ArticleMetaData";
+
+      var params2 = {
+        TableName: table2,
+        Key: {
+          articleId: articleIdInput
+        },
+        UpdateExpression: "set draftArticleTag=:a",
+        ExpressionAttributeValues: {
+          ":a": draftArticleTag
+        },
+        ReturnValues: "UPDATED_NEW"
+      };
     }
+
+    // Update the ArticleMetaData table.
+    docClient.update(params2, function(err, data) {
+      if (err) {
+        console.error(
+          "Unable to update item. Error JSON:",
+          JSON.stringify(err, null, 2)
+        );
+        return res.status(500).json({
+          message:
+            "Error: Could not save the draft article tag in article meta data table.",
+          details: err
+        });
+      } else {
+        console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+      }
+    });
   });
 });
 
@@ -207,7 +411,7 @@ router.post("/saveArticleById", authModule, (req, res, next) => {
 // Delete the entry from ArticleInProgressData table.
 // Delete the entry from ArticleInProgressMetaData table.
 router.post("/submitArticleById", authModule, (req, res, next) => {
-  console.log("Received POST Request to SAVE article by article id.");
+  console.log("Received POST Request to SUBMIT article by article id.");
 
   var articleIdInput = req.body.articleId;
   var articleTag = req.body.articleTag;
@@ -217,7 +421,7 @@ router.post("/submitArticleById", authModule, (req, res, next) => {
   // Validations
 
   if (articleIdInput === undefined || articleIdInput.trim() == "") {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Error: Could not find articleId."
     });
   }
@@ -227,7 +431,7 @@ router.post("/submitArticleById", authModule, (req, res, next) => {
     title === undefined ||
     content === undefined
   ) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Error: Invalid 'articleTag', 'title' or 'content' input."
     });
   }
@@ -239,11 +443,11 @@ router.post("/submitArticleById", authModule, (req, res, next) => {
     Key: {
       articleId: articleIdInput
     },
-    UpdateExpression: "set articleTag = :a, title=:t, content=:c",
+    UpdateExpression: "set title=:t, content=:c, isSubmit=:i",
     ExpressionAttributeValues: {
-      ":a": articleTag,
       ":t": title,
-      ":c": content
+      ":c": content,
+      ":i": true
     },
     ReturnValues: "UPDATED_NEW"
   };
@@ -255,145 +459,46 @@ router.post("/submitArticleById", authModule, (req, res, next) => {
         "Unable to update item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
-      res.status(500).json({
+      return res.status(500).json({
         message: "Error: Could not save the article details in database.",
         details: err
       });
     } else {
       console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
 
-      // Copy article meta data from ArticleInProgressMetaData table to ArticleMetaData table.
+      // Update articleTag in ArticleMetaData table.
 
-      var table2 = "ArticleInProgressMetaData";
+      var table2 = "ArticleMetaData";
 
       var params2 = {
         TableName: table2,
         Key: {
           articleId: articleIdInput
-        }
+        },
+        UpdateExpression: "set articleTag=:a",
+        ExpressionAttributeValues: {
+          ":a": articleTag
+        },
+        ReturnValues: "UPDATED_NEW"
       };
-
-      docClient.get(params2, function(err, data) {
-        if (err) {
-          console.error(
-            "Unable to read item. Error JSON:",
-            JSON.stringify(err, null, 2)
-          );
-          res.status(500).json({
-            message:
-              "Error: Could not get article in progress meta data from Database!",
-            details: err
-          });
-        } else {
-          console.log(
-            "Success: Get Article in progress meta data:",
-            JSON.stringify(data, null, 2)
-          );
-
-          var articleInProgressMetaData = data.Item;
-
-          // Write articleInProgressMetaData into ArticleMetaData Table.
-
-          var table3 = "ArticleMetaData";
-
-          var params3 = {
-            TableName: table3,
-            Key: {
-              articleId: articleIdInput
-            },
-            UpdateExpression: "set groupTag = :g, preferenceInGroup=:p",
-            ExpressionAttributeValues: {
-              ":g": articleInProgressMetaData.groupTag,
-              ":p": articleInProgressMetaData.preference
-            },
-            ReturnValues: "UPDATED_NEW"
-          };
-
-          docClient.update(params3, function(err, data) {
-            if (err) {
-              console.error(
-                "Unable to read item. Error JSON:",
-                JSON.stringify(err, null, 2)
-              );
-              res.status(500).json({
-                message: "Error: Could not update meta data in Database!",
-                details: err
-              });
-            } else {
-              console.log(
-                "Success: Updated article meta data:",
-                JSON.stringify(data, null, 2)
-              );
-
-              // Delete the entry from ArticleInProgressMetaData table and ArticleInProgressData table
-
-              // 1. Delete the entry from ArticleInProgressMetaData table
-              var table4 = "ArticleInProgressMetaData";
-
-              var params4 = {
-                TableName: table4,
-                Key: {
-                  articleId: articleIdInput
-                }
-              };
-
-              docClient.delete(params4, function(err, data) {
-                if (err) {
-                  console.error(
-                    "Unable to read item. Error JSON:",
-                    JSON.stringify(err, null, 2)
-                  );
-                  res.status(500).json({
-                    message:
-                      "Error: Could not delete article in progress meta data in Database!",
-                    details: err
-                  });
-                } else {
-                  console.log(
-                    "Success: Deleted article in progress meta data:",
-                    JSON.stringify(data, null, 2)
-                  );
-
-                  // 2. Delete the entry ArticleInProgressData table
-                  var table5 = "ArticleInProgressData";
-
-                  var params5 = {
-                    TableName: table5,
-                    Key: {
-                      articleId: articleIdInput
-                    }
-                  };
-
-                  docClient.delete(params5, function(err, data) {
-                    if (err) {
-                      console.error(
-                        "Unable to read item. Error JSON:",
-                        JSON.stringify(err, null, 2)
-                      );
-                      res.status(500).json({
-                        message:
-                          "Error: Could not delete article in progress data in Database!",
-                        details: err
-                      });
-                    } else {
-                      console.log(
-                        "Success: Deleted article in progress data:",
-                        JSON.stringify(data, null, 2)
-                      );
-
-                      res.status(200).json({
-                        message: "Article submitted successfully!",
-                        articleId: articleIdInput
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
     }
+
+    // Update the ArticleMetaData table.
+    docClient.update(params2, function(err, data) {
+      if (err) {
+        console.error(
+          "Unable to update item. Error JSON:",
+          JSON.stringify(err, null, 2)
+        );
+        return res.status(500).json({
+          message:
+            "Error: Could not save the article tag in article meta data table.",
+          details: err
+        });
+      } else {
+        console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+      }
+    });
   });
 });
 
@@ -416,13 +521,13 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
   // Validations
 
   if (groupTag === undefined || groupTag.trim() == "") {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Error: groupTag not found."
     });
   }
 
   if (articleTag === undefined || articleTag.trim() == "") {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Error: articleTag not found."
     });
   }
@@ -434,7 +539,7 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
 
   // Getting the current preference and incrementing it by 1.
 
-  var table = "ArticleInProgressMetaData";
+  var table = "ArticleMetaData";
 
   var params = {
     TableName: table
@@ -446,7 +551,7 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
         "Unable to read item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
-      res.status(500).json({
+      return res.status(500).json({
         message: "Error: Could not read article meta data from Database!",
         details: err
       });
@@ -456,27 +561,25 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
         JSON.stringify(data, null, 2)
       );
 
-      var articleInProgressMetaData = data;
+      var articleMetaData = data;
 
-      var filteredArticleInProgressMetaData = _.where(
-        articleInProgressMetaData.Items,
-        {
-          groupTag: groupTag
-        }
-      );
+      var filteredArticleMetaData = _.where(articleMetaData.Items, {
+        groupTag: groupTag
+      });
 
-      var preference = filteredArticleInProgressMetaData.length + 1;
+      var preference = filteredArticleMetaData.length + 1;
 
-      var table2 = "ArticleInProgressMetaData";
+      var table2 = "ArticleMetaData";
 
       var params2 = {
         TableName: table2,
         Key: {
           articleId: articleIdGenerated
         },
-        UpdateExpression: "set groupTag=:g, preference=:p",
+        UpdateExpression: "set groupTag=:g, articleTag=:a, preference=:p",
         ExpressionAttributeValues: {
           ":g": groupTag,
+          ":a": articleTag,
           ":p": preference
         },
         ReturnValues: "UPDATED_NEW"
@@ -489,7 +592,7 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
             "Unable to update item. Error JSON:",
             JSON.stringify(err, null, 2)
           );
-          res.status(500).json({
+          return res.status(500).json({
             message: "Error: Could not save the article meta data in database.",
             details: err
           });
@@ -497,18 +600,21 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
           console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
 
           // Adding an entry into the ArticleInProgressData table with the generated articleId and the input articleTag
-          var table3 = "ArticleInProgressData";
+          var table3 = "ArticleData";
 
           var params3 = {
             TableName: table3,
             Key: {
               articleId: articleIdGenerated
             },
-            UpdateExpression: "set articleTag=:a, title=:t, content=:c",
+            UpdateExpression:
+              "set articleTag=:a, title=:t, content=:c, draftContent=:d, isSubmit=:i",
             ExpressionAttributeValues: {
               ":a": articleTag,
               ":t": " ",
-              ":c": " "
+              ":c": " ",
+              ":d": " ",
+              ":i": false
             },
             ReturnValues: "UPDATED_NEW"
           };
@@ -520,7 +626,7 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
                 "Unable to update item. Error JSON:",
                 JSON.stringify(err, null, 2)
               );
-              res.status(500).json({
+              return res.status(500).json({
                 message:
                   "Error: Could not save the article meta data in database.",
                 details: err
@@ -531,7 +637,7 @@ router.post("/createNewArticle", authModule, (req, res, next) => {
                 JSON.stringify(data, null, 2)
               );
 
-              res.status(200).json({
+              return res.status(200).json({
                 message: "Article created successfully!",
                 articleId: articleIdGenerated,
                 articleData: data.Attributes

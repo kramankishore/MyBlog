@@ -15,7 +15,7 @@ paths:
   /blogImages/uploadImage:
     post:
       tags:
-        - "Blog Images"
+        - "Admin"
       summary: "Upload Images on to the Server."
       description: ""
       operationId: "uploadImage"
@@ -95,7 +95,7 @@ paths:
   /blogContent/saveArticleById:
     post:
       tags:
-        - "Blog Content"
+        - "Admin"
       summary: "To save article details by article Id."
       description: ""
       operationId: "saveArticleById"
@@ -113,7 +113,7 @@ paths:
           description: "Article details"
           required: true
           schema:
-            $ref: "#/definitions/articleDetails"
+            $ref: "#/definitions/saveArticleDetails"
       responses:
         default:
           description: "successful operation"
@@ -121,7 +121,7 @@ paths:
   /blogContent/submitArticleById:
     post:
       tags:
-        - "Blog Content"
+        - "Admin"
       summary: "To save article details by article Id."
       description: ""
       operationId: "submitArticleById"
@@ -139,7 +139,7 @@ paths:
           description: "Article details"
           required: true
           schema:
-            $ref: "#/definitions/articleDetails"
+            $ref: "#/definitions/submitArticleDetails"
       responses:
         default:
           description: "successful operation"
@@ -147,7 +147,7 @@ paths:
   /blogContent/createNewArticle:
     post:
       tags:
-        - "Blog Content"
+        - "Admin"
       summary: "To create new article meta data."
       description: ""
       operationId: "createNewArticle"
@@ -177,7 +177,7 @@ paths:
   /userManagement/login:
     post:
       tags:
-        - "User Management"
+        - "Admin"
       summary: "To authenticate a user."
       description: ""
       operationId: "login"
@@ -195,13 +195,69 @@ paths:
         default:
           description: "successful operation"
       x-swagger-router-controller: "User"
+  /blogContent/getArticleMapForAdmin:
+    get:
+      tags:
+        - "Admin"
+      summary: "To retrieve all articles and their article groups for Admin."
+      description: ""
+      operationId: "getArticleMapForAdmin"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Authorization"
+          description: "Auth token"
+          type: "string"
+          required: true
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /blogContent/getArticleByIdForAdmin:
+    get:
+      tags:
+        - "Admin"
+      summary: "To retrieve article details by article Id."
+      description: ""
+      operationId: "getArticleById"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Authorization"
+          description: "Auth token"
+          type: "string"
+          required: true
+        - in: "query"
+          name: "id"
+          description: "Article Id"
+          required: true
+          type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
 definitions:
   uploadImage:
     type: "object"
     properties:
       file:
         type: "object"
-  articleDetails:
+  saveArticleDetails:
+    type: "object"
+    properties:
+      articleId:
+        type: "string"
+      draftArticleTag:
+        type: "string"
+      draftTitle:
+        type: "string"
+      draftContent:
+        type: "string"
+  submitArticleDetails:
     type: "object"
     properties:
       articleId:

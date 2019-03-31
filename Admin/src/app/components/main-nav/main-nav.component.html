@@ -9,38 +9,34 @@
   >
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#" (click)="toggleMenu(1)"
+      <a mat-list-item (click)="toggleMenu(1)"
         >Options Basics
         <mat-icon *ngIf="!showMenuBasics">chevron_right</mat-icon>
         <mat-icon *ngIf="showMenuBasics">expand_more</mat-icon>
       </a>
       <mat-nav-list class="sidenav-submenu" *ngIf="showMenuBasics">
-        <a mat-list-item href="#" (click)="renderOptionBasics(1)"
-          >Options Basics1</a
-        >
-        <a mat-list-item href="#" (click)="renderOptionBasics(2)"
-          >Options Basics2</a
-        >
+        <a mat-list-item (click)="renderOptionBasics(1)">Options Basics1</a>
+        <a mat-list-item (click)="renderOptionBasics(2)">Options Basics2</a>
         <button mat-button>Add New</button>
       </mat-nav-list>
-      <a mat-list-item href="#" (click)="toggleMenu(2)"
+      <a mat-list-item (click)="toggleMenu(2)"
         >My Strategy
         <mat-icon *ngIf="!showMenuStrategy">chevron_right</mat-icon>
         <mat-icon *ngIf="showMenuStrategy">expand_more</mat-icon>
       </a>
       <mat-nav-list class="sidenav-submenu" *ngIf="showMenuStrategy">
-        <a mat-list-item href="#" (click)="renderMyStatergy(1)">My Strategy1</a>
-        <a mat-list-item href="#" (click)="renderMyStatergy(2)">My Strategy2</a>
+        <a mat-list-item (click)="renderMyStatergy(1)">My Strategy1</a>
+        <a mat-list-item (click)="renderMyStatergy(2)">My Strategy2</a>
         <button mat-button>Add New</button>
       </mat-nav-list>
-      <a mat-list-item href="#" (click)="toggleMenu(3)"
+      <a mat-list-item (click)="toggleMenu(3)"
         >Trade History
         <mat-icon *ngIf="!showMenuTrades">chevron_right</mat-icon>
         <mat-icon *ngIf="showMenuTrades">expand_more</mat-icon>
       </a>
       <mat-nav-list class="sidenav-submenu" *ngIf="showMenuTrades">
-        <a mat-list-item href="#">Trade History1</a>
-        <a mat-list-item href="#">Trade History2</a>
+        <a mat-list-item>Trade History1</a>
+        <a mat-list-item>Trade History2</a>
         <button mat-button>Add New</button>
       </mat-nav-list>
     </mat-nav-list>

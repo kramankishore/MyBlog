@@ -3,12 +3,11 @@ Database Design
 Table 1: ArticleData
 {
  "articleId": "" // Unique ID - Partition Key
- // Field moved to meta data table //"articleTag": "Options Basics 1",
+ "articleTag": "Options Basics 1",
  "title": "",
- "content": "",
- "draftContent": "",
- "isSubmit": true/false
+ "content": ""
 }
+
 
 Table 2: ArticleGroupData
 { 
@@ -21,7 +20,22 @@ Table 3: ArticleMetaData
 {
 "articleId": "", // Parition Key
 "groupTag": "",
-"articleTag": "",
+"preferenceInGroup": "1"
+}
+
+Table 4: ArticleInProgressData
+{
+ "articleId": "" // Unique ID
+ "articleTag": "Options Basics 1",
+ "title": "",
+ "content": ""
+}
+
+Table 5: ArticleInProgressMetaData
+// More fields can be added later like number of hits, user ratings, etc.
+{
+"articleId": "", // Parition Key
+"groupTag": "",
 "preferenceInGroup": "1"
 }
 
