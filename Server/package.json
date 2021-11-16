@@ -10,7 +10,7 @@
   "author": "K Raman Kishore, Pallavi Mahalingaiah",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.382.0",
+    "aws-sdk": "^2.814.0",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
